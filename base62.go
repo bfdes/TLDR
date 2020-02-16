@@ -18,7 +18,7 @@ func init() {
 }
 
 // Encode a non-negative integer into a base 62 symbol string.
-// Panics if argument is positive.
+// Panics if the argument is positive.
 func Encode(id int) string {
 	if id < 0 {
 		panic("Argument must be non-negative")
