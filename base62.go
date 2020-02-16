@@ -39,8 +39,8 @@ func Decode(fragment string) int {
 	coeff := 1
 	for _, char := range fragment {
 		digit := digits[char]
-		if digits == nil {
-			panic("Fragment contains illegal characters")
+		if char != '0' && digit == 0 {
+			panic("Fragment contains illegal character(s)")
 		}
 		id += coeff * digit
 		coeff *= base
