@@ -36,9 +36,11 @@ func TestDecode(t *testing.T) {
 }
 
 func TestEncodeDecode(t *testing.T) {
-	testCases := 20
-	for i := 0; i < testCases; i++ {
-		value := rand.Int()
+	testCases := []int{0, 1, 62}
+	for i := 0; i < 20; i++ {
+		testCases = append(testCases, rand.Int())
+	}
+	for _, value := range testCases {
 		actual := Decode(Encode(value))
 		if actual != value {
 			t.Error(value, " does not roundtrip")
