@@ -5,20 +5,32 @@ import (
 	"testing"
 )
 
+type pair struct {
+	decoded int
+	encoded string
+}
+
+var pairs = []pair{
+	{0, ""},
+	{1, "1"},
+	{62, "01"},
+	{1504, "go"},
+}
+
 func TestEncode(t *testing.T) {
-	type pair struct {
-		value    int
-		expected string
-	}
-	pairs := []pair{
-		{0, ""},
-		{1, "1"},
-		{62, "01"},
-	}
 	for _, pair := range pairs {
-		actual := Encode(pair.value)
-		if actual != pair.expected {
-			t.Error(pair.value)
+		actual := Encode(pair.decoded)
+		if actual != pair.encoded {
+			t.Error(pair.decoded, " encoded to ", actual, " not ", pair.encoded)
+		}
+	}
+}
+
+func TestDecode(t *testing.T) {
+	for _, pair := range pairs {
+		actual := Decode(pair.encoded)
+		if actual != pair.decoded {
+			t.Error(pair.encoded, " decoded to ", actual, " not ", pair.decoded)
 		}
 	}
 }
