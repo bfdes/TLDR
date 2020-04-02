@@ -1,4 +1,4 @@
-package base62
+package main
 
 import (
 	"math/rand"
@@ -19,19 +19,41 @@ var pairs = []pair{
 
 func TestEncode(t *testing.T) {
 	for _, pair := range pairs {
-		actual := Encode(pair.decoded)
-		if actual != pair.encoded {
-			t.Error(pair.decoded, " encoded to ", actual, " not ", pair.encoded)
+		actual, err := Encode(pair.decoded)
+		if err != nil {
+			t.Fatal(err)
 		}
+		if actual != pair.encoded {
+			t.Errorf("%d encoded to %s, not %s", pair.decoded, actual, pair.encoded)
+		}
+	}
+}
+
+func TestEncodeNegative(t *testing.T) {
+	arg := -1
+	encoded, err := Encode(arg)
+	if err == nil {
+		t.Errorf("Negative argument %d encoded to %s", arg, encoded)
 	}
 }
 
 func TestDecode(t *testing.T) {
 	for _, pair := range pairs {
-		actual := Decode(pair.encoded)
-		if actual != pair.decoded {
-			t.Error(pair.encoded, " decoded to ", actual, " not ", pair.decoded)
+		actual, err := Decode(pair.encoded)
+		if err != nil {
+			t.Fatal(err)
 		}
+		if actual != pair.decoded {
+			t.Errorf("%s decoded to %d, not %d", pair.encoded, actual, pair.decoded)
+		}
+	}
+}
+
+func TestDecodeIllegalCharacter(t *testing.T) {
+	arg := "!llegal"
+	decoded, err := Decode(arg)
+	if err == nil {
+		t.Errorf("Malformed fragment %s decoded to %d", arg, decoded)
 	}
 }
 
@@ -41,9 +63,16 @@ func TestEncodeDecode(t *testing.T) {
 		testCases = append(testCases, rand.Int())
 	}
 	for _, value := range testCases {
-		actual := Decode(Encode(value))
+		encoded, err := Encode(value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		actual, err := Decode(encoded)
+		if err != nil {
+			t.Fatal(err)
+		}
 		if actual != value {
-			t.Error(value, " does not roundtrip")
+			t.Errorf("%d does not roundtrip", value)
 		}
 	}
 }
