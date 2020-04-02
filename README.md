@@ -54,11 +54,6 @@ To action a redirect request, the request slug is decoded to obtain an ID and it
 
 If viewing figures are desired, "LINK_VIEWED" events can be dispatched to an unordered queue for asynchronous processing by serverless-functions.
 
-Example deployment using AWS services:
-
-![System diagram](./system.png?raw=true "Redirect flow on AWS")
-
-
 ### Advantages
 
 Since links have to be immutable, cache-invalidation is not an issue. Eviction only needs to be carried out when memory constraints are met. 
