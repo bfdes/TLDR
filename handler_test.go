@@ -45,7 +45,7 @@ func TestRedirect(t *testing.T) {
 	}
 }
 
-func TestRedirectMalformedFragment(t *testing.T) {
+func TestRedirectMalformedSlug(t *testing.T) {
 	service := linkServiceStub{}
 	handler := RedirectHandler(service)
 	recorder := httptest.NewRecorder()
@@ -79,10 +79,10 @@ func TestRedirectMissingLink(t *testing.T) {
 
 func TestCreateLink(t *testing.T) {
 	url := "http://example.com"
-	fragment := "xyz"
+	slug := "xyz"
 	service := linkServiceStub{
 		create: func(url string) (Link, error) {
-			return Link{url, &fragment}, nil
+			return Link{url, &slug}, nil
 		},
 	}
 	handler := CreateLinkHandler(service)
@@ -99,7 +99,7 @@ func TestCreateLink(t *testing.T) {
 	link := Link{}
 	body, _ := ioutil.ReadAll(res.Body)
 	json.Unmarshal(body, &link)
-	if *link.Fragment != fragment {
+	if *link.Slug != slug {
 		t.Fail()
 	}
 }

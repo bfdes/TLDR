@@ -32,14 +32,14 @@ func Encode(id int) (string, error) {
 	return sb.String(), nil
 }
 
-// Decode a base 62 encoded string fragment
-func Decode(fragment string) (int, error) {
+// Decode a base 62 encoded string
+func Decode(str string) (int, error) {
 	id := 0
 	coeff := 1
-	for _, char := range fragment {
+	for _, char := range str {
 		digit := digits[char]
 		if char != '0' && digit == 0 {
-			return 0, errors.New("Fragment contains illegal character(s)")
+			return 0, errors.New("String contains illegal character(s)")
 		}
 		id += coeff * digit
 		coeff *= base

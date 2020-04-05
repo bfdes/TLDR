@@ -33,7 +33,7 @@ Default connection settings are defined in `main.go`.
 curl http://localhost:<PORT>/api/links \
   --request POST \
   --data '{"url": "http://example.com"}'
-# {"url": "http://example.com", "fragment": "<SLUG>" }
+# {"url": "http://example.com", "slug": "<SLUG>" }
 ```
 
 ### Redirect a link
@@ -56,12 +56,12 @@ If viewing figures are desired, "LINK_VIEWED" events can be dispatched to an uno
 
 ### Advantages
 
-Since links have to be immutable, cache-invalidation is not an issue. Eviction only needs to be carried out when memory constraints are met. 
+* Since links have to be immutable, cache-invalidation is not an issue. Eviction only needs to be carried out when memory constraints are met. 
 
-Multiple links can be created for the same url. 
+* Multiple links can be created for the same url. 
 
 ### Shortcomings
 
-For performance reasons, ID sequences are not gapless. So multiple links for the same url are accommodated to avoid wasting index space, compute and sequence values for every duplicate insert.
+* For performance reasons, ID sequences are not gapless. So multiple links for the same url are accommodated to avoid wasting index space, compute and sequence values for every duplicate insert.
 
-Viewing figures may be stale because they are written in an asynchronous manner in order to avoid hitting the database for every redirect request.
+* Viewing figures may be stale because they are written in an asynchronous manner in order to avoid hitting the database for every redirect request.

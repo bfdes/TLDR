@@ -57,6 +57,6 @@ func (service linkService) Create(url string) (Link, error) {
 	if err != nil {
 		return Link{}, err
 	}
-	fragment, err := Encode(id)
-	return Link{url, &fragment}, err
+	slug, err := Encode(id)
+	return Link{url, &slug}, err
 }

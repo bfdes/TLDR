@@ -53,7 +53,7 @@ func TestDecodeIllegalCharacter(t *testing.T) {
 	arg := "!llegal"
 	decoded, err := Decode(arg)
 	if err == nil {
-		t.Errorf("Malformed fragment %s decoded to %d", arg, decoded)
+		t.Errorf("Malformed slug %s decoded to %d", arg, decoded)
 	}
 }
 

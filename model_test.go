@@ -17,20 +17,20 @@ func TestLinkUnmarshal(t *testing.T) {
 	if link.URL != url {
 		t.Fail()
 	}
-	if link.Fragment != nil {
+	if link.Slug != nil {
 		t.Fail()
 	}
 }
 
 func TestLinkMarshal(t *testing.T) {
 	url := "http://example.com"
-	fragment := "xyz"
-	link := Link{url, &fragment}
+	slug := "xyz"
+	link := Link{url, &slug}
 	bytes, err := json.Marshal(link)
 	if err != nil {
 		t.Fail()
 	}
-	str := fmt.Sprintf(`{"url":"%s","fragment":"%s"}`, url, fragment)
+	str := fmt.Sprintf(`{"url":"%s","slug":"%s"}`, url, slug)
 	if str != string(bytes) {
 		t.Fail()
 	}
