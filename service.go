@@ -2,6 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"strconv"
+
+	"github.com/bradfitz/gomemcache/memcache"
 )
 
 // LinkService fetches and persists links
@@ -11,19 +14,33 @@ type LinkService interface {
 }
 
 type linkService struct {
-	db *sql.DB
+	cache *memcache.Client
+	db    *sql.DB
 }
 
 func (service linkService) Get(id int) (link Link, found bool) {
-	query := `
-		SELECT url FROM links
-		WHERE id=$1
-	`
 	var url string
-	found = true
-	err := service.db.QueryRow(query, id).Scan(&url)
-	if err != nil {
-		found = false // No rows returned or serial overflow
+	strID := strconv.Itoa(id)
+	item, err := service.cache.Get(strID)
+
+	if err == nil {
+		// Cache hit
+		found = true
+		url = string(item.Value)
+	} else {
+		// Cache miss
+		query := `
+			SELECT url FROM links
+			WHERE id=$1
+		`
+		err = service.db.QueryRow(query, id).Scan(&url)
+		if err == nil {
+			// Write to cache, but serve request even on error
+			found = true
+			item = &memcache.Item{Key: strID, Value: []byte(url)}
+			service.cache.Set(item)
+		}
+		// No rows returned or serial overflow
 	}
 	link = Link{url, nil} // Don't bother re-encoding the ID
 	return

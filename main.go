@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	_ "github.com/lib/pq"
 )
 
@@ -20,6 +21,8 @@ func getOrElse(key, defaultValue string) string {
 
 var (
 	port       = getOrElse("PORT", "8080")
+	cacheHost  = getOrElse("MEMCACHED_HOST", "localhost")
+	cachePort  = getOrElse("MEMCACHED_PORT", "11211")
 	dbHost     = getOrElse("POSTGRES_HOST", "localhost")
 	dbPort     = getOrElse("POSTGRES_PORT", "5432")
 	dbUser     = getOrElse("POSTGRES_USER", "postgres")
@@ -50,7 +53,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	linkService := linkService{db}
+	connStr = fmt.Sprintf("%s:%s", cacheHost, cachePort)
+	cache := memcache.New(connStr)
+	linkService := linkService{cache, db}
 	http.Handle("/api/links", CreateLinkHandler(linkService))
 	http.Handle("/", RedirectHandler(linkService))
 	port := fmt.Sprintf(":%s", port)

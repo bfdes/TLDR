@@ -1,5 +1,9 @@
 version: '3.3'
 services:
+  cache:
+    image: memcached:latest
+    ports:
+      - "11211:11211"
   database:
     image: postgres:latest
     env_file:
