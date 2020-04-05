@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -39,7 +40,7 @@ func Decode(str string) (int, error) {
 	for _, char := range str {
 		digit := digits[char]
 		if char != '0' && digit == 0 {
-			return 0, errors.New("String contains illegal character(s)")
+			return 0, fmt.Errorf(`Argument "%s" contains illegal character(s)`, str)
 		}
 		id += coeff * digit
 		coeff *= base
