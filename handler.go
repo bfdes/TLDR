@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 // RedirectHandler expands a shortened link by slug
@@ -22,7 +23,7 @@ func RedirectHandler(service LinkService) http.Handler {
 		} else if err == ErrNotFound {
 			http.NotFound(w, r)
 		} else {
-			// err must be nil...  
+			// err must be nil...
 			http.Redirect(w, r, url, http.StatusPermanentRedirect)
 		}
 	})
@@ -52,7 +53,8 @@ func CreateLinkHandler(service LinkService) http.Handler {
 			http.Error(w, msg, http.StatusBadRequest)
 			return
 		}
-		link, err := service.Create(payload.URL)
+		url := strings.TrimSpace(payload.URL)
+		link, err := service.Create(url)
 		if err != nil {
 			msg := http.StatusText(http.StatusInternalServerError)
 			http.Error(w, msg, http.StatusInternalServerError)
