@@ -22,7 +22,7 @@ func init() {
 // Encode a non-negative integer into a base 62 symbol string
 func Encode(id int) (string, error) {
 	if id < 0 {
-		return "", errors.New("Argument to Encode must be non-negative")
+		return "", errors.New("argument to Encode must be non-negative")
 	}
 	var sb strings.Builder
 	for id > 0 {
@@ -40,7 +40,7 @@ func Decode(str string) (int, error) {
 	for _, char := range str {
 		digit := digits[char]
 		if char != '0' && digit == 0 {
-			return 0, fmt.Errorf(`Argument "%s" contains illegal character(s)`, str)
+			return 0, fmt.Errorf(`argument "%s" contains illegal character(s)`, str)
 		}
 		id += coeff * digit
 		coeff *= base

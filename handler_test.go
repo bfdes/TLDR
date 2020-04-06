@@ -11,12 +11,12 @@ import (
 )
 
 type linkServiceStub struct {
-	get    func(id int) (Link, bool)
+	get    func(slug string) (string, error)
 	create func(url string) (Link, error)
 }
 
-func (stub linkServiceStub) Get(id int) (link Link, found bool) {
-	return stub.get(id)
+func (stub linkServiceStub) Get(slug string) (string, error) {
+	return stub.get(slug)
 }
 
 func (stub linkServiceStub) Create(url string) (Link, error) {
@@ -26,8 +26,8 @@ func (stub linkServiceStub) Create(url string) (Link, error) {
 func TestRedirect(t *testing.T) {
 	url := "http://example.com"
 	service := linkServiceStub{
-		get: func(id int) (Link, bool) {
-			return Link{url, nil}, true
+		get: func(slug string) (string, error) {
+			return url, nil
 		},
 	}
 	handler := RedirectHandler(service)
@@ -46,7 +46,11 @@ func TestRedirect(t *testing.T) {
 }
 
 func TestRedirectMalformedSlug(t *testing.T) {
-	service := linkServiceStub{}
+	service := linkServiceStub{
+		get: func(slug string) (string, error) {
+			return "", ErrDecodeFailure
+		},
+	}
 	handler := RedirectHandler(service)
 	recorder := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/x!z", nil)
@@ -61,8 +65,8 @@ func TestRedirectMalformedSlug(t *testing.T) {
 
 func TestRedirectMissingLink(t *testing.T) {
 	service := linkServiceStub{
-		get: func(id int) (Link, bool) {
-			return Link{"", nil}, false
+		get: func(slug string) (string, error) {
+			return "", ErrNotFound
 		},
 	}
 	handler := RedirectHandler(service)

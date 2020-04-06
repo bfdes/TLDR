@@ -15,18 +15,16 @@ func RedirectHandler(service LinkService) http.Handler {
 			return
 		}
 		slug := r.URL.Path[1:]
-		id, err := Decode(slug)
-		if err != nil {
+		url, err := service.Get(slug)
+		if err == ErrDecodeFailure {
 			msg := http.StatusText(http.StatusBadRequest)
 			http.Error(w, msg, http.StatusBadRequest)
-			return
+		} else if err == ErrNotFound {
+			http.NotFound(w, r)
+		} else {
+			// err must be nil...  
+			http.Redirect(w, r, url, http.StatusPermanentRedirect)
 		}
-		link, found := service.Get(id)
-		if found {
-			http.Redirect(w, r, link.URL, http.StatusPermanentRedirect)
-			return
-		}
-		http.NotFound(w, r)
 	})
 }
 
