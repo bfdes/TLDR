@@ -36,11 +36,11 @@ func TestRedirect(t *testing.T) {
 	handler.ServeHTTP(recorder, req)
 	res := recorder.Result()
 	if res.StatusCode != http.StatusPermanentRedirect {
-		msg := "Unexpected status code: wanted %d, got %d instead"
-		t.Errorf(msg, http.StatusPermanentRedirect, res.StatusCode)
+		msg := "unexpected status code: wanted %d, got %d instead"
+		t.Fatalf(msg, http.StatusPermanentRedirect, res.StatusCode)
 	}
 	if loc := res.Header.Get("Location"); loc != url {
-		msg := "Unexpected location: wanted %d, got %d instead"
+		msg := "unexpected location: wanted %d, got %d instead"
 		t.Errorf(msg, url, loc)
 	}
 }
@@ -58,7 +58,7 @@ func TestRedirectMalformedSlug(t *testing.T) {
 	res := recorder.Result()
 	expected := http.StatusBadRequest
 	if actual := res.StatusCode; actual != expected {
-		msg := "Unexpected status code: wanted %d, got %d instead"
+		msg := "unexpected status code: wanted %d, got %d instead"
 		t.Errorf(msg, expected, actual)
 	}
 }
@@ -76,7 +76,7 @@ func TestRedirectMissingLink(t *testing.T) {
 	res := recorder.Result()
 	expected := http.StatusNotFound
 	if actual := res.StatusCode; actual != expected {
-		msg := "Unexpected status code: wanted %d, got %d instead"
+		msg := "unexpected status code: wanted %d, got %d instead"
 		t.Errorf(msg, expected, actual)
 	}
 }
@@ -97,8 +97,8 @@ func TestCreateLink(t *testing.T) {
 	handler.ServeHTTP(recorder, req)
 	res := recorder.Result()
 	if res.StatusCode != http.StatusCreated {
-		msg := "Unexpected status code: wanted %d, got %d instead"
-		t.Errorf(msg, http.StatusCreated, res.StatusCode)
+		msg := "unexpected status code: wanted %d, got %d instead"
+		t.Fatalf(msg, http.StatusCreated, res.StatusCode)
 	}
 	link := Link{}
 	body, _ := ioutil.ReadAll(res.Body)
@@ -118,7 +118,7 @@ func TestCreateMalformedPayload(t *testing.T) {
 	res := recorder.Result()
 	expected := http.StatusBadRequest
 	if actual := res.StatusCode; actual != expected {
-		msg := "Unexpected status code: wanted %d, got %d instead"
+		msg := "unexpected status code: wanted %d, got %d instead"
 		t.Errorf(msg, expected, actual)
 	}
 }
@@ -137,7 +137,7 @@ func TestCreateServerError(t *testing.T) {
 	res := recorder.Result()
 	expected := http.StatusInternalServerError
 	if actual := res.StatusCode; actual != expected {
-		msg := "Unexpected status code: wanted %d, got %d instead"
+		msg := "unexpected status code: wanted %d, got %d instead"
 		t.Errorf(msg, expected, actual)
 	}
 }

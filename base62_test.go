@@ -33,7 +33,7 @@ func TestEncodeNegative(t *testing.T) {
 	arg := -1
 	encoded, err := Encode(arg)
 	if err == nil {
-		t.Errorf("Negative argument %d encoded to %s", arg, encoded)
+		t.Errorf("negative argument %d encoded to %s", arg, encoded)
 	}
 }
 
@@ -53,7 +53,7 @@ func TestDecodeIllegalCharacter(t *testing.T) {
 	arg := "!llegal"
 	decoded, err := Decode(arg)
 	if err == nil {
-		t.Errorf("Malformed slug %s decoded to %d", arg, decoded)
+		t.Errorf("malformed slug %s decoded to %d", arg, decoded)
 	}
 }
 

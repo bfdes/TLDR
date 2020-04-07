@@ -30,12 +30,16 @@ var (
 	dbName     = getOrElse("POSTGRES_DB", "url-shortener")
 )
 
-func main() {
+func initCache(host, port string) *memcache.Client {
+	connStr := fmt.Sprintf("%s:%s", host, port)
+	return memcache.New(connStr)
+}
+
+func initDb(host, port, user, password, dbName string) *sql.DB {
 	connStr := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
+		host, port, user, password, dbName)
 	db, err := sql.Open("postgres", connStr)
-	defer db.Close()
 	if err != nil {
 		panic(err)
 	}
@@ -53,8 +57,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	connStr = fmt.Sprintf("%s:%s", cacheHost, cachePort)
-	cache := memcache.New(connStr)
+	return db
+}
+
+func main() {
+	cache := initCache(cacheHost, cachePort)
+	db := initDb(dbHost, dbPort, dbUser, dbPassword, dbName)
+	defer db.Close()
 	linkService := linkService{cache, db}
 	http.Handle("/api/links", CreateLinkHandler(linkService))
 	http.Handle("/", RedirectHandler(linkService))
