@@ -1,20 +1,15 @@
 on: push
-
 jobs:
-
   build:
     name: Test
     runs-on: ubuntu-latest
     steps:
-
     - name: Check out repository
       uses: actions/checkout@v2
-      
     - name: Set up Go
       uses: actions/setup-go@v1
       with:
         go-version: 1.11.5
-        
     - name: Restore Go modules cache
       uses: actions/cache@v1
       with:
@@ -22,11 +17,9 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
-    
     - name: Run tests
       run: go test -coverprofile=coverage.txt
       env:
         CI: true
-         
     - name: Upload test coverage report
       uses: codecov/codecov-action@v1
