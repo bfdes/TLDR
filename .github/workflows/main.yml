@@ -24,6 +24,9 @@ jobs:
           ${{ runner.os }}-go-
     
     - name: Run tests
-      run: go test
+      run: go test -coverprofile=coverage.txt
       env:
         CI: true
+         
+    - name: Upload test coverage report
+      uses: codecov/codecov-action@v1
