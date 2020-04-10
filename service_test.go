@@ -1,20 +1,12 @@
 package main
 
 import (
-	"os"
 	"testing"
 
 	"github.com/google/uuid"
 )
 
-func skipCI(t *testing.T) {
-	if os.Getenv("CI") != "" {
-		t.Skip("Running in CI")
-	}
-}
-
 func TestGetUrl(t *testing.T) {
-	skipCI(t)
 	cache := initCache(cacheHost, cachePort)
 	db := initDb(dbHost, dbPort, dbUser, dbPassword, dbName)
 	defer db.Close()
@@ -65,7 +57,6 @@ func TestGetUrl(t *testing.T) {
 }
 
 func TestCreateDuplicateLinks(t *testing.T) {
-	skipCI(t)
 	cache := initCache(cacheHost, cachePort)
 	db := initDb(dbHost, dbPort, dbUser, dbPassword, dbName)
 	defer db.Close()
