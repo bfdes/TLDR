@@ -1,8 +1,7 @@
 name: Test
 on: push
 jobs:
-  build:
-    name: Test
+  test:
     runs-on: ubuntu-latest
     container: golang
     services:
