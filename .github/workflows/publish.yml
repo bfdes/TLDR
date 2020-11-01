@@ -10,7 +10,7 @@ on:
 env:
   IMAGE_NAME: url-shortener
 jobs:
-  push:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
