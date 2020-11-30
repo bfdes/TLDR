@@ -1,6 +1,6 @@
 # url-shortener
 
-[![GitHub Actions](https://github.com/bfdes/url-shortener/workflows/Test/badge.svg)](https://github.com/bfdes/url-shortener/actions?query=workflow%3ATest)
+![GitHub Actions](https://github.com/bfdes/url-shortener/workflows/Build/badge.svg)
 [![Codecov](https://codecov.io/gh/bfdes/url-shortener/branch/master/graph/badge.svg)](https://codecov.io/gh/bfdes/url-shortener)
 
 URL shortener and redirect service.
